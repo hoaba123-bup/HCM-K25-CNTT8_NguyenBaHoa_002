@@ -153,11 +153,11 @@ ORDER BY price DESC;
 
 
 -- =========================================
--- CÂU 9: LẤY 3 ĐƠN HÀNG ĐẦU TIÊN
+-- CÂU 9: LẤY 3 ĐƠN HÀNG MỚI NHẤT
 -- =========================================
 SELECT *
 FROM Orders
-ORDER BY order_date ASC
+ORDER BY order_date DESC
 LIMIT 3;
 
 
@@ -183,21 +183,19 @@ ON p.category_id = c.category_id;
 -- CÂU 12: LIỆT KÊ DANH MỤC VÀ SẢN PHẨM
 -- =========================================
 SELECT c.category_name,
-	   p.product_name
+       p.product_name
 FROM Category c
-JOIN Product p
-ON p.category_id = c.category_id;
+LEFT JOIN Product p
+    ON p.category_id = c.category_id;
 
 
 -- =========================================
--- CÂU 13: TÍNH TỔNG DOANH THU THEO SẢN PHẨM
+-- CÂU 13: TÍNH TỔNG DOANH THU THEO TỪNG NGÀY
 -- =========================================
-SELECT p.product_name,
-       SUM(od.subtotal) AS total_revenue
-FROM Order_detail od
-JOIN Product p
-    ON od.product_id = p.product_id
-GROUP BY p.product_name;
+SELECT DATE(order_date) AS order_day,
+       SUM(total_amount) AS total_revenue
+FROM Orders
+GROUP BY DATE(order_date);
 
 -- =========================================
 -- CÂU 14: ĐƠN HÀNG CÓ TỪ 2 SẢN PHẨM TRỞ LÊN
